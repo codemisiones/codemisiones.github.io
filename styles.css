@@ -1,0 +1,587 @@
+/* Reset optimizado */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* Variables de diseño */
+:root {
+    --azul: #1470DB;
+    --azul-oscuro: #0d5bb0;
+    --negro: #121212;
+    --blanco: #FFFFFF;
+    --gris: #E0E0E0;
+    --sombra: 0 4px 20px rgba(0,0,0,0.25);
+    --borde: 1px solid rgba(255,255,255,0.1);
+    --destacado: #FFD700;
+    --whatsapp: #25D366;
+    --facebook: #1877F2;
+    --instagram: #E4405F;
+    --tiktok: #000000;
+}
+
+/* Animaciones */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Estilos base */
+body {
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    color: var(--blanco);
+    line-height: 1.6;
+    background-color: var(--negro);
+    overflow-x: hidden;
+    position: relative;
+    opacity: 0;
+    animation: fadeIn 0.8s ease forwards;
+}
+
+/* Fondo profesional mejorado */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(20, 112, 219, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(20, 112, 219, 0.1) 0%, transparent 40%),
+        linear-gradient(to bottom, #0a0a0a, #121212);
+    z-index: -2;
+}
+
+/* Contenedor principal */
+.contenedor {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    position: relative;
+}
+
+/* Header mejorado sin logo */
+.header {
+    text-align: center;
+    padding: 3rem 0 4rem;
+    position: relative;
+}
+
+.header-content {
+    animation: slideInUp 1s ease-out;
+}
+
+.brand-title {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(45deg, var(--azul), var(--destacado), var(--azul));
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradient 3s ease infinite;
+    letter-spacing: -0.02em;
+}
+
+.brand-subtitle {
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    color: var(--gris);
+    font-weight: 400;
+    opacity: 0.9;
+}
+
+/* Sección hero mejorada */
+.hero {
+    text-align: center;
+    margin-bottom: 4rem;
+    animation: slideInUp 1s ease-out 0.2s both;
+}
+
+.hero h2 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+    background: linear-gradient(to right, var(--azul), var(--destacado));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 600;
+}
+
+.hero p {
+    font-size: clamp(1.1rem, 3vw, 1.3rem);
+    max-width: 800px;
+    margin: 0 auto 2rem;
+    color: var(--gris);
+    line-height: 1.7;
+}
+
+/* Tarjetas de beneficios */
+.beneficios {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 4rem 0;
+}
+
+.beneficio {
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(10px);
+    border: var(--borde);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.beneficio.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.beneficio::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--azul);
+    transition: width 0.3s ease;
+}
+
+.beneficio:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--sombra);
+    border-color: rgba(20, 112, 219, 0.3);
+}
+
+.beneficio:hover::before {
+    width: 8px;
+}
+
+.beneficio h3 {
+    color: var(--blanco);
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    position: relative;
+    font-weight: 600;
+}
+
+.beneficio h3 span {
+    color: var(--destacado);
+}
+
+.beneficio p {
+    color: var(--gris);
+    line-height: 1.7;
+}
+
+/* CTA destacado */
+.cta-destacado {
+    text-align: center;
+    margin: 6rem 0;
+    padding: 3rem 2rem;
+    background: linear-gradient(135deg, rgba(20, 112, 219, 0.1), rgba(20, 112, 219, 0.05));
+    border-radius: 16px;
+    border: var(--borde);
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.cta-destacado.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.cta-destacado::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,215,0,0.05) 0%, transparent 70%);
+    animation: pulse 8s infinite alternate;
+    z-index: -1;
+}
+
+.cta-destacado h2 {
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    margin-bottom: 1.5rem;
+    color: var(--blanco);
+    font-weight: 600;
+}
+
+.cta-destacado p {
+    max-width: 700px;
+    margin: 0 auto 2rem;
+    color: var(--gris);
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+
+/* Redes Sociales */
+.redes-sociales {
+    text-align: center;
+    margin: 5rem 0;
+    padding: 3rem 2rem;
+    background: rgba(255,255,255,0.02);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    border: var(--borde);
+}
+
+.redes-sociales h3 {
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    margin-bottom: 2rem;
+    color: var(--blanco);
+    font-weight: 600;
+}
+
+.social-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.social-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.social-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.social-btn:hover::before {
+    opacity: 1;
+}
+
+.social-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.whatsapp {
+    background: var(--whatsapp);
+    color: var(--blanco);
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+}
+
+.whatsapp:hover {
+    background: #128C7E;
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+}
+
+.facebook {
+    background: var(--facebook);
+    color: var(--blanco);
+    box-shadow: 0 4px 15px rgba(24, 119, 242, 0.4);
+}
+
+.facebook:hover {
+    background: #166FE5;
+    box-shadow: 0 6px 20px rgba(24, 119, 242, 0.6);
+}
+
+.instagram {
+    background: linear-gradient(45deg, #F56040, #C13584, #833AB4);
+    color: var(--blanco);
+    box-shadow: 0 4px 15px rgba(228, 64, 95, 0.4);
+}
+
+.instagram:hover {
+    background: linear-gradient(45deg, #E1503B, #B12A5B, #7B2CBF);
+    box-shadow: 0 6px 20px rgba(228, 64, 95, 0.6);
+}
+
+.tiktok {
+    background: var(--blanco);
+    color: var(--tiktok);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+.tiktok:hover {
+    background: #f0f0f0;
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+}
+
+/* Botón principal */
+.boton-principal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--azul);
+    color: var(--blanco);
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    border: 2px solid var(--azul);
+    box-shadow: 0 4px 15px rgba(20, 112, 219, 0.4);
+    position: relative;
+    overflow: hidden;
+    min-height: 54px;
+}
+
+.boton-principal::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.boton-principal:hover {
+    background: var(--azul-oscuro);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(20, 112, 219, 0.6);
+}
+
+.boton-principal:hover::after {
+    opacity: 1;
+}
+
+/* Footer mejorado */
+.footer {
+    text-align: center;
+    padding: 3rem 0;
+    margin-top: 4rem;
+    border-top: var(--borde);
+    background: rgba(255,255,255,0.02);
+}
+
+.footer-content p {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.footer-location {
+    color: rgba(255,255,255,0.5);
+    font-size: 0.8rem;
+}
+
+/* Responsive mejorado */
+@media (max-width: 768px) {
+    .contenedor {
+        padding: 1.5rem;
+    }
+    
+    .header {
+        padding: 2rem 0 3rem;
+    }
+    
+    .brand-title {
+        font-size: 2.5rem;
+    }
+    
+    .brand-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .hero {
+        margin-bottom: 3rem;
+    }
+    
+    .hero h2 {
+        font-size: 2rem;
+    }
+    
+    .beneficios {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin: 3rem 0;
+    }
+    
+    .beneficio {
+        padding: 2rem 1.5rem;
+    }
+    
+    .cta-destacado {
+        margin: 4rem 0;
+        padding: 2rem 1.5rem;
+    }
+    
+    .redes-sociales {
+        margin: 3rem 0;
+        padding: 2rem 1rem;
+    }
+    
+    .social-buttons {
+        gap: 1rem;
+    }
+    
+    .social-btn {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.85rem;
+    }
+    
+    .boton-principal {
+        padding: 0.9rem 2rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .contenedor {
+        padding: 1rem;
+    }
+    
+    .header {
+        padding: 1.5rem 0 2rem;
+    }
+    
+    .brand-title {
+        font-size: 2rem;
+    }
+    
+    .brand-subtitle {
+        font-size: 1rem;
+    }
+    
+    .hero h2 {
+        font-size: 1.8rem;
+    }
+    
+    .hero p {
+        font-size: 1rem;
+    }
+    
+    .beneficio {
+        padding: 1.5rem 1rem;
+    }
+    
+    .beneficio h3 {
+        font-size: 1.2rem;
+    }
+    
+    .cta-destacado h2 {
+        font-size: 1.3rem;
+    }
+    
+    .cta-destacado p {
+        font-size: 1rem;
+    }
+    
+    .redes-sociales h3 {
+        font-size: 1.3rem;
+    }
+    
+    .social-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
+    }
+    
+    .social-btn {
+        width: 100%;
+        max-width: 200px;
+        justify-content: center;
+        padding: 0.8rem 1rem;
+    }
+}
+
+/* Mejoras de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --negro: #0a0a0a;
+        --gris: #d0d0d0;
+    }
+}
+
+/* Focus styles para accesibilidad */
+.boton-principal:focus,
+.social-btn:focus {
+    outline: 2px solid var(--destacado);
+    outline-offset: 2px;
+}
+
+/* Loading skeleton */
+.skeleton {
+    background: linear-gradient(90deg, rgba(255,255,255,0.1) 25%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
