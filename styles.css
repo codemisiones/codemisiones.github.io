@@ -1,47 +1,72 @@
-/* Reset optimizado */
-* { margin: 0; padding: 0; box-sizing: border-box; }
+/* Reset optimizado y compatible */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-/* Variables de diseño */
+/* Variables CSS con fallbacks */
 :root {
     --azul: #1470DB;
     --azul-oscuro: #0d5bb0;
     --negro: #121212;
     --blanco: #FFFFFF;
     --gris: #E0E0E0;
-    --sombra: 0 4px 20px rgba(0,0,0,0.25);
-    --borde: 1px solid rgba(255,255,255,0.1);
     --destacado: #FFD700;
     --whatsapp: #25D366;
     --facebook: #1877F2;
     --instagram: #E4405F;
     --tiktok: #000000;
+    
+    /* Sombras optimizadas */
+    --sombra-suave: 0 2px 8px rgba(0,0,0,0.15);
+    --sombra-media: 0 4px 20px rgba(0,0,0,0.25);
+    --sombra-fuerte: 0 6px 30px rgba(0,0,0,0.35);
+    
+    /* Bordes */
+    --borde: 1px solid rgba(255,255,255,0.1);
+    --borde-hover: 1px solid rgba(20, 112, 219, 0.3);
+    
+    /* Transiciones estandarizadas */
+    --transicion-rapida: 0.2s ease;
+    --transicion-media: 0.3s ease;
+    --transicion-lenta: 0.6s ease;
+    
+    /* Z-index system */
+    --z-background: -2;
+    --z-content: 0;
+    --z-elevated: 10;
+    --z-modal: 1000;
 }
 
-/* Animaciones */
+/* Animaciones optimizadas con will-change */
 @keyframes pulse {
     0% { transform: scale(1); }
     50% { transform: scale(1.05); }
     100% { transform: scale(1); }
 }
 
-@keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
-}
-
 @keyframes fadeIn {
-    to { opacity: 1; }
+    from { 
+        opacity: 0; 
+        transform: translateZ(0); /* Fuerza aceleración hardware */
+    }
+    to { 
+        opacity: 1; 
+        transform: translateZ(0);
+    }
 }
 
 @keyframes slideInUp {
     from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translate3d(0, 30px, 0); /* Usa transform3d para mejor performance */
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translate3d(0, 0, 0);
     }
 }
 
@@ -51,9 +76,21 @@
     100% { background-position: 0% 50%; }
 }
 
-/* Estilos base */
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Estilos base con mejor compatibilidad */
+html {
+    font-size: 16px; /* Base para rem */
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%; /* Previene zoom automático en iOS */
+    -ms-text-size-adjust: 100%;
+}
+
 body {
-    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
     color: var(--blanco);
     line-height: 1.6;
     background-color: var(--negro);
@@ -61,9 +98,12 @@ body {
     position: relative;
     opacity: 0;
     animation: fadeIn 0.8s ease forwards;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
 }
 
-/* Fondo profesional mejorado */
+/* Fondo con mejor rendimiento */
 body::before {
     content: "";
     position: fixed;
@@ -75,7 +115,8 @@ body::before {
         radial-gradient(circle at 20% 30%, rgba(20, 112, 219, 0.15) 0%, transparent 40%),
         radial-gradient(circle at 80% 70%, rgba(20, 112, 219, 0.1) 0%, transparent 40%),
         linear-gradient(to bottom, #0a0a0a, #121212);
-    z-index: -2;
+    z-index: var(--z-background);
+    will-change: transform; /* Optimiza para animaciones */
 }
 
 /* Contenedor principal */
@@ -87,7 +128,7 @@ body::before {
     position: relative;
 }
 
-/* Header mejorado sin logo */
+/* Header optimizado */
 .header {
     text-align: center;
     padding: 3rem 0 4rem;
@@ -96,19 +137,36 @@ body::before {
 
 .header-content {
     animation: slideInUp 1s ease-out;
+    will-change: transform;
 }
 
 .brand-title {
     font-size: clamp(2.5rem, 6vw, 4rem);
     font-weight: 700;
     margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+    
+    /* Gradient con fallback para navegadores antiguos */
+    background: var(--azul); /* Fallback */
     background: linear-gradient(45deg, var(--azul), var(--destacado), var(--azul));
     background-size: 200% 200%;
+    
+    /* Prefijos para mejor compatibilidad */
     -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     background-clip: text;
     color: transparent;
+    
     animation: gradient 3s ease infinite;
-    letter-spacing: -0.02em;
+    will-change: background-position;
+}
+
+/* Fallback para navegadores sin soporte de background-clip */
+@supports not (-webkit-background-clip: text) {
+    .brand-title {
+        color: var(--azul);
+        background: none;
+    }
 }
 
 .brand-subtitle {
@@ -118,22 +176,35 @@ body::before {
     opacity: 0.9;
 }
 
-/* Sección hero mejorada */
+/* Sección hero optimizada */
 .hero {
     text-align: center;
     margin-bottom: 4rem;
     animation: slideInUp 1s ease-out 0.2s both;
+    will-change: transform, opacity;
 }
 
 .hero h2 {
     font-size: clamp(2rem, 5vw, 3.5rem);
     margin-bottom: 1.5rem;
     line-height: 1.2;
+    font-weight: 600;
+    
+    /* Gradient con fallback */
+    background: var(--azul); /* Fallback */
     background: linear-gradient(to right, var(--azul), var(--destacado));
     -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     background-clip: text;
     color: transparent;
-    font-weight: 600;
+}
+
+/* Fallback para h2 */
+@supports not (-webkit-background-clip: text) {
+    .hero h2 {
+        color: var(--azul);
+        background: none;
+    }
 }
 
 .hero p {
@@ -144,7 +215,7 @@ body::before {
     line-height: 1.7;
 }
 
-/* Tarjetas de beneficios */
+/* Grid con fallback para navegadores antiguos */
 .beneficios {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -152,18 +223,48 @@ body::before {
     margin: 4rem 0;
 }
 
+/* Fallback para navegadores sin Grid */
+@supports not (display: grid) {
+    .beneficios {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    
+    .beneficio {
+        flex: 1 1 300px;
+        margin: 1rem;
+    }
+}
+
+/* Tarjetas de beneficios optimizadas */
 .beneficio {
     background: rgba(255,255,255,0.03);
+    
+    /* Backdrop-filter con fallback */
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    
     border: var(--borde);
     border-radius: 16px;
     padding: 2.5rem 2rem;
-    transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition: 
+        opacity var(--transicion-lenta),
+        transform var(--transicion-lenta),
+        box-shadow var(--transicion-media),
+        border-color var(--transicion-media);
+    will-change: transform, opacity;
+}
+
+/* Fallback para navegadores sin backdrop-filter */
+@supports not (backdrop-filter: blur(10px)) {
+    .beneficio {
+        background: rgba(18, 18, 18, 0.95);
+    }
 }
 
 .beneficio.visible {
@@ -179,12 +280,12 @@ body::before {
     width: 3px;
     height: 100%;
     background: var(--azul);
-    transition: width 0.3s ease;
+    transition: width var(--transicion-media);
 }
 
 .beneficio:hover {
     transform: translateY(-8px);
-    box-shadow: var(--sombra);
+    box-shadow: var(--sombra-media);
     border-color: rgba(20, 112, 219, 0.3);
 }
 
@@ -209,7 +310,7 @@ body::before {
     line-height: 1.7;
 }
 
-/* CTA destacado */
+/* CTA destacado con mejor rendimiento */
 .cta-destacado {
     text-align: center;
     margin: 6rem 0;
@@ -221,7 +322,10 @@ body::before {
     overflow: hidden;
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition: 
+        opacity var(--transicion-lenta),
+        transform var(--transicion-lenta);
+    will-change: transform, opacity;
 }
 
 .cta-destacado.visible {
@@ -239,6 +343,7 @@ body::before {
     background: radial-gradient(circle, rgba(255,215,0,0.05) 0%, transparent 70%);
     animation: pulse 8s infinite alternate;
     z-index: -1;
+    will-change: transform;
 }
 
 .cta-destacado h2 {
@@ -256,15 +361,23 @@ body::before {
     line-height: 1.7;
 }
 
-/* Redes Sociales */
+/* Redes Sociales optimizadas */
 .redes-sociales {
     text-align: center;
     margin: 5rem 0;
     padding: 3rem 2rem;
     background: rgba(255,255,255,0.02);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-radius: 16px;
     border: var(--borde);
+}
+
+/* Fallback para redes sociales */
+@supports not (backdrop-filter: blur(10px)) {
+    .redes-sociales {
+        background: rgba(18, 18, 18, 0.95);
+    }
 }
 
 .redes-sociales h3 {
@@ -291,10 +404,18 @@ body::before {
     text-decoration: none;
     font-weight: 500;
     font-size: 0.9rem;
-    transition: all 0.3s ease;
+    transition: 
+        transform var(--transicion-media),
+        box-shadow var(--transicion-media),
+        background-color var(--transicion-media);
     border: 2px solid transparent;
     position: relative;
     overflow: hidden;
+    will-change: transform;
+    
+    /* Mejora el toque en móviles */
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 .social-btn::before {
@@ -306,7 +427,7 @@ body::before {
     height: 100%;
     background: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0));
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity var(--transicion-media);
 }
 
 .social-btn:hover::before {
@@ -315,54 +436,54 @@ body::before {
 
 .social-btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
 }
 
+/* Botones específicos de redes sociales */
 .whatsapp {
     background: var(--whatsapp);
     color: var(--blanco);
-    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    box-shadow: var(--sombra-suave);
 }
 
 .whatsapp:hover {
     background: #128C7E;
-    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+    box-shadow: var(--sombra-media);
 }
 
 .facebook {
     background: var(--facebook);
     color: var(--blanco);
-    box-shadow: 0 4px 15px rgba(24, 119, 242, 0.4);
+    box-shadow: var(--sombra-suave);
 }
 
 .facebook:hover {
     background: #166FE5;
-    box-shadow: 0 6px 20px rgba(24, 119, 242, 0.6);
+    box-shadow: var(--sombra-media);
 }
 
 .instagram {
     background: linear-gradient(45deg, #F56040, #C13584, #833AB4);
     color: var(--blanco);
-    box-shadow: 0 4px 15px rgba(228, 64, 95, 0.4);
+    box-shadow: var(--sombra-suave);
 }
 
 .instagram:hover {
     background: linear-gradient(45deg, #E1503B, #B12A5B, #7B2CBF);
-    box-shadow: 0 6px 20px rgba(228, 64, 95, 0.6);
+    box-shadow: var(--sombra-media);
 }
 
 .tiktok {
     background: var(--blanco);
     color: var(--tiktok);
-    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+    box-shadow: var(--sombra-suave);
 }
 
 .tiktok:hover {
     background: #f0f0f0;
-    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+    box-shadow: var(--sombra-media);
 }
 
-/* Botón principal */
+/* Botón principal optimizado */
 .boton-principal {
     display: inline-flex;
     align-items: center;
@@ -374,12 +495,21 @@ body::before {
     text-decoration: none;
     font-weight: 600;
     font-size: 1.1rem;
-    transition: all 0.3s ease;
+    transition: 
+        background-color var(--transicion-media),
+        transform var(--transicion-media),
+        box-shadow var(--transicion-media);
     border: 2px solid var(--azul);
-    box-shadow: 0 4px 15px rgba(20, 112, 219, 0.4);
+    box-shadow: var(--sombra-suave);
     position: relative;
     overflow: hidden;
     min-height: 54px;
+    will-change: transform;
+    
+    /* Mejoras táctiles */
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    cursor: pointer;
 }
 
 .boton-principal::after {
@@ -391,20 +521,24 @@ body::before {
     height: 100%;
     background: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0));
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity var(--transicion-media);
 }
 
 .boton-principal:hover {
     background: var(--azul-oscuro);
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(20, 112, 219, 0.6);
+    box-shadow: var(--sombra-media);
 }
 
 .boton-principal:hover::after {
     opacity: 1;
 }
 
-/* Footer mejorado */
+.boton-principal:active {
+    transform: translateY(-1px);
+}
+
+/* Footer optimizado */
 .footer {
     text-align: center;
     padding: 3rem 0;
@@ -424,8 +558,46 @@ body::before {
     font-size: 0.8rem;
 }
 
-/* Responsive mejorado */
-@media (max-width: 768px) {
+/* Mejoras de accesibilidad */
+.boton-principal:focus,
+.social-btn:focus {
+    outline: 2px solid var(--destacado);
+    outline-offset: 2px;
+}
+
+/* Focus visible más moderno */
+.boton-principal:focus-visible,
+.social-btn:focus-visible {
+    outline: 2px solid var(--destacado);
+    outline-offset: 2px;
+}
+
+/* Loading skeleton optimizado */
+.skeleton {
+    background: linear-gradient(90deg, 
+        rgba(255,255,255,0.1) 25%, 
+        rgba(255,255,255,0.2) 50%, 
+        rgba(255,255,255,0.1) 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    will-change: background-position;
+}
+
+/* Responsive Design Mejorado */
+
+/* Tablets grandes y laptops pequeñas */
+@media screen and (max-width: 1024px) {
+    .contenedor {
+        padding: 1.8rem;
+    }
+    
+    .social-buttons {
+        gap: 1.2rem;
+    }
+}
+
+/* Tablets */
+@media screen and (max-width: 768px) {
     .contenedor {
         padding: 1.5rem;
     }
@@ -434,20 +606,8 @@ body::before {
         padding: 2rem 0 3rem;
     }
     
-    .brand-title {
-        font-size: 2.5rem;
-    }
-    
-    .brand-subtitle {
-        font-size: 1.1rem;
-    }
-    
     .hero {
         margin-bottom: 3rem;
-    }
-    
-    .hero h2 {
-        font-size: 2rem;
     }
     
     .beneficios {
@@ -485,29 +645,14 @@ body::before {
     }
 }
 
-@media (max-width: 480px) {
+/* Móviles grandes */
+@media screen and (max-width: 480px) {
     .contenedor {
         padding: 1rem;
     }
     
     .header {
         padding: 1.5rem 0 2rem;
-    }
-    
-    .brand-title {
-        font-size: 2rem;
-    }
-    
-    .brand-subtitle {
-        font-size: 1rem;
-    }
-    
-    .hero h2 {
-        font-size: 1.8rem;
-    }
-    
-    .hero p {
-        font-size: 1rem;
     }
     
     .beneficio {
@@ -518,18 +663,6 @@ body::before {
         font-size: 1.2rem;
     }
     
-    .cta-destacado h2 {
-        font-size: 1.3rem;
-    }
-    
-    .cta-destacado p {
-        font-size: 1rem;
-    }
-    
-    .redes-sociales h3 {
-        font-size: 1.3rem;
-    }
-    
     .social-buttons {
         flex-direction: column;
         align-items: center;
@@ -538,24 +671,48 @@ body::before {
     
     .social-btn {
         width: 100%;
-        max-width: 200px;
+        max-width: 280px;
         justify-content: center;
         padding: 0.8rem 1rem;
     }
 }
 
-/* Mejoras de accesibilidad */
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
+/* Móviles pequeños */
+@media screen and (max-width: 320px) {
+    .contenedor {
+        padding: 0.8rem;
+    }
+    
+    .beneficio {
+        padding: 1.2rem 0.8rem;
+    }
+    
+    .cta-destacado {
+        padding: 1.5rem 1rem;
+    }
+    
+    .social-btn {
+        max-width: 240px;
+        padding: 0.7rem 0.8rem;
+        font-size: 0.8rem;
+    }
+    
+    .boton-principal {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.95rem;
     }
 }
 
-/* Dark mode support */
+/* Mejoras para dispositivos de alta densidad */
+@media screen and (-webkit-min-device-pixel-ratio: 2),
+       screen and (min-resolution: 192dpi) {
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* Optimizaciones para modo oscuro del sistema */
 @media (prefers-color-scheme: dark) {
     :root {
         --negro: #0a0a0a;
@@ -563,25 +720,94 @@ body::before {
     }
 }
 
-/* Focus styles para accesibilidad */
-.boton-principal:focus,
-.social-btn:focus {
-    outline: 2px solid var(--destacado);
-    outline-offset: 2px;
-}
-
-/* Loading skeleton */
-.skeleton {
-    background: linear-gradient(90deg, rgba(255,255,255,0.1) 25%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 75%);
-    background-size: 200% 100%;
-    animation: loading 1.5s infinite;
-}
-
-@keyframes loading {
-    0% {
-        background-position: 200% 0;
+/* Optimizaciones para usuarios que prefieren menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
     }
-    100% {
-        background-position: -200% 0;
+    
+    .beneficio,
+    .cta-destacado {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* Optimizaciones para pantallas de contraste alto */
+@media (prefers-contrast: high) {
+    :root {
+        --borde: 2px solid rgba(255,255,255,0.3);
+        --sombra-suave: 0 2px 8px rgba(0,0,0,0.5);
+        --sombra-media: 0 4px 20px rgba(0,0,0,0.6);
+    }
+    
+    .beneficio {
+        border-width: 2px;
+    }
+    
+    .boton-principal,
+    .social-btn {
+        border-width: 2px;
+    }
+}
+
+/* Optimizaciones para navegadores antiguos */
+
+/* Flexbox fallbacks */
+@supports not (display: flex) {
+    .social-buttons {
+        text-align: center;
+    }
+    
+    .social-btn {
+        display: inline-block;
+        margin: 0.5rem;
+    }
+}
+
+/* Transform3d fallback */
+@supports not (transform: translate3d(0,0,0)) {
+    .beneficio {
+        transform: translateY(20px);
+    }
+    
+    .beneficio.visible {
+        transform: translateY(0);
+    }
+    
+    .beneficio:hover {
+        transform: translateY(-8px);
+    }
+}
+
+/* Sticky fallback */
+@supports not (position: sticky) {
+    .header {
+        position: relative;
+    }
+}
+
+/* Print styles */
+@media print {
+    body {
+        background: white;
+        color: black;
+    }
+    
+    .boton-principal,
+    .social-btn {
+        border: 2px solid black;
+        background: white;
+        color: black;
+    }
+    
+    .beneficio {
+        border: 1px solid #ccc;
+        break-inside: avoid;
     }
 }
